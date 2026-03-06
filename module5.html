@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module V — Linear Algebra | MCAP136</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1209; --paper: #fdf8f0; --cream: #f5ede0;
+    --gold: #b8860b; --gold-light: #d4a843; --rust: #8b3a2a;
+    --teal: #1a5f5c; --border: #d4c4a0; --muted: #6b5e4a; --highlight: #fffbf0;
+    --mod-color: #1c3a2a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Source Serif 4', Georgia, serif; background: var(--paper); color: var(--ink); line-height: 1.75; font-size: 15px; }
+  .topnav { background: var(--ink); display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 2rem; }
+  .topnav a { color: #c8b896; font-size: 0.72rem; text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; }
+  .topnav a:hover { color: var(--gold-light); }
+  .page-links { display: flex; gap: 1rem; }
+  .page-links a { padding: 0.25rem 0.7rem; border: 1px solid #3a3020; border-radius: 20px; }
+  .page-links a.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+  .mod-header { background: var(--mod-color); color: #fff; padding: 2.5rem 4rem 2rem; position: relative; overflow: hidden; }
+  .mod-header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.04) 30px, rgba(255,255,255,0.04) 31px); }
+  .mod-inner { position: relative; max-width: 960px; margin: auto; }
+  .mod-tag { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.5rem; }
+  .mod-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 900; line-height: 1.1; }
+  .mod-header h1 span { opacity: 0.6; font-size: 0.6em; display: block; font-weight: 400; margin-top: 0.3rem; letter-spacing: 0.05em; }
+  .container { max-width: 960px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+  .q-card { border: 1px solid var(--border); border-radius: 2px; margin-bottom: 1.8rem; background: #fff; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .q-head { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.5rem; background: var(--cream); border-bottom: 1px solid var(--border); }
+  .q-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); line-height: 1; min-width: 2rem; }
+  .q-text { font-size: 0.95rem; font-weight: 600; color: var(--ink); flex: 1; }
+  .q-badges { display: flex; gap: 0.4rem; margin-left: auto; flex-shrink: 0; }
+  .badge { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.2rem 0.55rem; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .badge-co { background: #e8f4f0; color: var(--teal); border: 1px solid #b0d8d4; }
+  .badge-rbtl { background: #fff3e0; color: #b45309; border: 1px solid #fed7aa; }
+  .badge-marks { background: var(--ink); color: var(--paper); }
+  .ans-body { padding: 1.5rem 1.8rem 1.8rem; }
+  h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--teal); margin: 1rem 0 0.4rem; }
+  p { margin-bottom: 0.7rem; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 0.7rem; }
+  li { margin-bottom: 0.3rem; }
+  .formula-box { background: var(--highlight); border-left: 3px solid var(--gold); padding: 0.8rem 1.2rem; margin: 0.8rem 0; border-radius: 0 2px 2px 0; }
+  .result-box { background: #f0f8f5; border: 1px solid #b0d8d0; border-left: 4px solid var(--teal); padding: 0.7rem 1.2rem; margin: 0.8rem 0; border-radius: 0 2px 2px 0; }
+  .result-box strong { color: var(--teal); }
+  table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; font-size: 0.88rem; }
+  th { background: var(--ink); color: var(--paper); padding: 0.45rem 0.8rem; text-align: center; font-weight: 600; }
+  td { border: 1px solid var(--border); padding: 0.4rem 0.8rem; text-align: center; }
+  tr:nth-child(even) td { background: var(--cream); }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; padding: 0.5rem 0 0.5rem 2.5rem; position: relative; border-left: 2px solid var(--border); margin-left: 0.8rem; margin-bottom: 0.3rem; }
+  .steps li::before { content: counter(step); position: absolute; left: -0.9rem; top: 0.45rem; background: var(--gold); color: #fff; font-size: 0.7rem; font-weight: 700; width: 1.6rem; height: 1.6rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .part { font-weight: 600; color: var(--rust); margin-top: 0.7rem; display: block; }
+  footer { text-align: center; padding: 2rem; background: var(--ink); color: #8a7a60; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4rem; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← Back to Home</a>
+  <div class="page-links">
+    <a href="module1.html">I</a>
+    <a href="module2.html">II</a>
+    <a href="module3.html">III</a>
+    <a href="module4.html">IV</a>
+    <a href="module5.html" class="active">V</a>
+  </div>
+</nav>
+
+<div class="mod-header">
+  <div class="mod-inner">
+    <div class="mod-tag">MCAP136 · Module V</div>
+    <h1>Linear Algebra &amp; Matrix Methods <span>Determinants · LU Decomposition · Eigenvalues · SVD</span></h1>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">1</div><div class="q-text">Find the determinant of A = [[1,−2,2],[0,2,−3],[3,−2,4]]</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <ol class="steps">
+        <li>Expand along Row 1:
+          \[|A|=1\begin{vmatrix}2&-3\\-2&4\end{vmatrix}-(-2)\begin{vmatrix}0&-3\\3&4\end{vmatrix}+2\begin{vmatrix}0&2\\3&-2\end{vmatrix}\]</li>
+        <li>\(=1(8-6)+2(0+9)+2(0-6)\)</li>
+        <li>\(=2+18-12=8\)</li>
+      </ol>
+      <div class="result-box"><strong>det(A) = 8</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">2</div><div class="q-text">Find the product AB: A=[[3,2,1],[2,4,2]], B=[[1,2],[0,4],[3,6]]</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>A is 2×3, B is 3×2 → AB is 2×2.</p>
+      <ol class="steps">
+        <li>\(AB_{11}=3(1)+2(0)+1(3)=6\)</li>
+        <li>\(AB_{12}=3(2)+2(4)+1(6)=20\)</li>
+        <li>\(AB_{21}=2(1)+4(0)+2(3)=8\)</li>
+        <li>\(AB_{22}=2(2)+4(4)+2(6)=32\)</li>
+      </ol>
+      <div class="formula-box">\[AB=\begin{pmatrix}6&20\\8&32\end{pmatrix}\]</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">3</div><div class="q-text">Explain Singular Value Decomposition (SVD).</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>SVD factorises any real \(m\times n\) matrix A into three matrices:</p>
+      <div class="formula-box">\[A = U\Sigma V^T\]</div>
+      <ul>
+        <li><strong>U</strong> — \(m\times m\) orthogonal matrix (left singular vectors = eigenvectors of \(AA^T\))</li>
+        <li><strong>Σ</strong> — \(m\times n\) diagonal matrix with singular values \(\sigma_1\geq\sigma_2\geq\ldots\geq0\)</li>
+        <li><strong>V</strong> — \(n\times n\) orthogonal matrix (right singular vectors = eigenvectors of \(A^TA\))</li>
+      </ul>
+      <p>Singular values: \(\sigma_i=\sqrt{\lambda_i(A^TA)}\). SVD always exists for any matrix.</p>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">4</div><div class="q-text">Mention any three applications of SVD.</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <ol>
+        <li><strong>Image Compression:</strong> Approximate a matrix with a lower-rank matrix by keeping only the top-k singular values, reducing storage while preserving essential information.</li>
+        <li><strong>PCA / Dimensionality Reduction:</strong> SVD is the backbone of Principal Component Analysis — finds directions of maximum variance to reduce feature dimensions.</li>
+        <li><strong>Solving Linear Systems (Pseudoinverse):</strong> \(A^+=V\Sigma^+U^T\) provides the least-squares solution to overdetermined systems \(Ax=b\).</li>
+        <li><strong>Recommender Systems:</strong> Collaborative filtering (Netflix, Amazon) uses SVD to discover latent patterns in user-item rating matrices.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">5 (a)</div><div class="q-text">State the properties of vectors.</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <ul>
+        <li><strong>Commutativity:</strong> \(\vec{a}+\vec{b}=\vec{b}+\vec{a}\)</li>
+        <li><strong>Associativity:</strong> \((\vec{a}+\vec{b})+\vec{c}=\vec{a}+(\vec{b}+\vec{c})\)</li>
+        <li><strong>Zero vector:</strong> \(\vec{a}+\vec{0}=\vec{a}\)</li>
+        <li><strong>Scalar multiplication:</strong> \(k(\vec{a}+\vec{b})=k\vec{a}+k\vec{b}\)</li>
+        <li><strong>Dot product:</strong> \(\vec{a}\cdot\vec{b}=|\vec{a}||\vec{b}|\cos\theta\) (commutative)</li>
+        <li><strong>Cross product:</strong> \(\vec{a}\times\vec{b}=-(\vec{b}\times\vec{a})\) (anti-commutative)</li>
+        <li><strong>Orthogonality:</strong> \(\vec{a}\perp\vec{b}\iff\vec{a}\cdot\vec{b}=0\)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">5 (b)</div><div class="q-text">Obtain eigenvalues of matrix [[2,−4],[−3,3]]</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <ol class="steps">
+        <li>Characteristic equation: \(|A-\lambda I|=0\)</li>
+        <li>\(\begin{vmatrix}2-\lambda&-4\\-3&3-\lambda\end{vmatrix}=(2-\lambda)(3-\lambda)-12=0\)</li>
+        <li>\(\lambda^2-5\lambda+6-12=0\implies\lambda^2-5\lambda-6=0\)</li>
+        <li>\((\lambda-6)(\lambda+1)=0\)</li>
+      </ol>
+      <div class="result-box"><strong>Eigenvalues: λ₁ = 6 and λ₂ = −1</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">6</div><div class="q-text">Solve by LU decomposition: 3x+2y+7z=4, 2x+3y+z=5, 3x+4y+z=7</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div></div>
+    <div class="ans-body">
+      <div class="formula-box">\[A=\begin{pmatrix}3&2&7\\2&3&1\\3&4&1\end{pmatrix},\quad b=\begin{pmatrix}4\\5\\7\end{pmatrix}\]</div>
+      <h4>Step 1: LU Decomposition (A = LU)</h4>
+      <ol class="steps">
+        <li>U[Row 1] = [3, 2, 7]</li>
+        <li>\(l_{21}=2/3,\;l_{31}=1\). R2−(2/3)R1→[0, 5/3, −11/3]. R3−R1→[0, 2, −6]</li>
+        <li>\(l_{32}=2/(5/3)=6/5\). R3−(6/5)R2→[0, 0, −8/5]</li>
+        <li>\(L=\begin{pmatrix}1&0&0\\2/3&1&0\\1&6/5&1\end{pmatrix},\quad U=\begin{pmatrix}3&2&7\\0&5/3&-11/3\\0&0&-8/5\end{pmatrix}\)</li>
+      </ol>
+      <h4>Step 2: Forward Substitution Ly = b</h4>
+      <ol class="steps">
+        <li>\(y_1=4\)</li>
+        <li>\((2/3)(4)+y_2=5\implies y_2=5-8/3=7/3\)</li>
+        <li>\((1)(4)+(6/5)(7/3)+y_3=7\implies y_3=7-4-14/5=1/5\)</li>
+      </ol>
+      <h4>Step 3: Back Substitution Ux = y</h4>
+      <ol class="steps">
+        <li>\((-8/5)z=1/5\implies z=-1/8\)</li>
+        <li>\((5/3)y+(-11/3)(-1/8)=7/3\implies y=9/8\)</li>
+        <li>\(3x+2(9/8)+7(-1/8)=4\implies 3x=21/8\implies x=7/8\)</li>
+      </ol>
+      <div class="result-box"><strong>x = 7/8, &nbsp;y = 9/8, &nbsp;z = −1/8</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">7</div><div class="q-text">Solve by LU decomposition: 2x+y+z=2, x+3y+2z=2, 3x+y+z=2</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div></div>
+    <div class="ans-body">
+      <div class="formula-box">\[A=\begin{pmatrix}2&1&1\\1&3&2\\3&1&1\end{pmatrix},\quad b=\begin{pmatrix}2\\2\\2\end{pmatrix}\]</div>
+      <h4>LU Decomposition</h4>
+      <ol class="steps">
+        <li>\(l_{21}=1/2,\;l_{31}=3/2\)</li>
+        <li>R2−(1/2)R1→[0, 5/2, 3/2]. R3−(3/2)R1→[0, −1/2, −1/2]</li>
+        <li>\(l_{32}=(−1/2)/(5/2)=−1/5\). R3−(−1/5)R2→[0, 0, −1/5]</li>
+        <li>\(U=\begin{pmatrix}2&1&1\\0&5/2&3/2\\0&0&-1/5\end{pmatrix}\)</li>
+      </ol>
+      <h4>Forward Substitution: Ly = b</h4>
+      <ol class="steps">
+        <li>\(y_1=2\)</li>
+        <li>\((1/2)(2)+y_2=2\implies y_2=1\)</li>
+        <li>\((3/2)(2)+(−1/5)(1)+y_3=2\implies y_3=2−3+1/5=−4/5\)</li>
+      </ol>
+      <h4>Back Substitution: Ux = y</h4>
+      <ol class="steps">
+        <li>\((-1/5)z=-4/5\implies z=4\)</li>
+        <li>\((5/2)y+(3/2)(4)=1\implies y=-2\)</li>
+        <li>\(2x+(-2)+4=2\implies x=0\)</li>
+      </ol>
+      <div class="result-box"><strong>x = 0, &nbsp;y = −2, &nbsp;z = 4</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">8</div><div class="q-text">Solve by LU decomposition: 4x+y+z=4, x+4y−2z=4, 3x+2y−z=6</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div></div>
+    <div class="ans-body">
+      <div class="formula-box">\[A=\begin{pmatrix}4&1&1\\1&4&-2\\3&2&-1\end{pmatrix},\quad b=\begin{pmatrix}4\\4\\6\end{pmatrix}\]</div>
+      <h4>LU Decomposition</h4>
+      <ol class="steps">
+        <li>\(l_{21}=1/4,\;l_{31}=3/4\)</li>
+        <li>R2−(1/4)R1→[0, 15/4, −9/4]. R3−(3/4)R1→[0, 5/4, −7/4]</li>
+        <li>\(l_{32}=(5/4)/(15/4)=1/3\). R3−(1/3)R2→[0, 0, −7/4+3/4]=[0, 0, −1]</li>
+        <li>\(U=\begin{pmatrix}4&1&1\\0&15/4&-9/4\\0&0&-1\end{pmatrix}\)</li>
+      </ol>
+      <h4>Forward: Ly = b</h4>
+      <ol class="steps">
+        <li>\(y_1=4\)</li>
+        <li>\((1/4)(4)+y_2=4\implies y_2=3\)</li>
+        <li>\((3/4)(4)+(1/3)(3)+y_3=6\implies 3+1+y_3=6\implies y_3=2\)</li>
+      </ol>
+      <h4>Back: Ux = y</h4>
+      <ol class="steps">
+        <li>\(-z=2\implies z=-2\)</li>
+        <li>\((15/4)y+(−9/4)(−2)=3\implies(15/4)y=3−18/4=−1.5\implies y=-0.4\)</li>
+        <li>\(4x+(−0.4)+(−2)=4\implies 4x=6.4\implies x=1.6\)</li>
+      </ol>
+      <div class="result-box"><strong>x = 1.6, &nbsp;y = −0.4, &nbsp;z = −2</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">9</div><div class="q-text">Find SVD for A = [[1,0,1],[−1,1,0]]</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div></div>
+    <div class="ans-body">
+      <ol class="steps">
+        <li>Compute \(AA^T\) (2×2):
+          \[AA^T=\begin{pmatrix}1&0&1\\-1&1&0\end{pmatrix}\begin{pmatrix}1&-1\\0&1\\1&0\end{pmatrix}=\begin{pmatrix}2&-1\\-1&2\end{pmatrix}\]</li>
+        <li>Eigenvalues of \(AA^T\): \(\lambda^2-4\lambda+3=0\implies(\lambda-3)(\lambda-1)=0\implies\lambda_1=3,\;\lambda_2=1\)</li>
+        <li>Singular values: \(\sigma_1=\sqrt{3},\;\sigma_2=1\)</li>
+        <li>\(\Sigma=\begin{pmatrix}\sqrt{3}&0&0\\0&1&0\end{pmatrix}\)</li>
+        <li>For λ=3: eigenvector of \(AA^T\) → \(u_1=\frac{1}{\sqrt{2}}\begin{pmatrix}1\\-1\end{pmatrix}\)</li>
+        <li>For λ=1: \(u_2=\frac{1}{\sqrt{2}}\begin{pmatrix}1\\1\end{pmatrix}\)</li>
+        <li>Right singular vectors: \(v_1=\frac{1}{\sigma_1}A^Tu_1=\frac{1}{\sqrt{6}}\begin{pmatrix}2\\-1\\1\end{pmatrix},\;v_2=\frac{1}{\sqrt{2}}\begin{pmatrix}0\\1\\1\end{pmatrix}\)</li>
+        <li>\(v_3\) = null space of A: \(v_3=\frac{1}{\sqrt{3}}\begin{pmatrix}-1\\1\\1\end{pmatrix}\)</li>
+      </ol>
+      <div class="formula-box">
+        \[U=\frac{1}{\sqrt{2}}\begin{pmatrix}1&1\\-1&1\end{pmatrix},\quad\Sigma=\begin{pmatrix}\sqrt{3}&0&0\\0&1&0\end{pmatrix},\quad V=\begin{pmatrix}\frac{2}{\sqrt{6}}&0&\frac{-1}{\sqrt{3}}\\\frac{-1}{\sqrt{6}}&\frac{1}{\sqrt{2}}&\frac{1}{\sqrt{3}}\\\frac{1}{\sqrt{6}}&\frac{1}{\sqrt{2}}&\frac{1}{\sqrt{3}}\end{pmatrix}\]
+      </div>
+      <div class="result-box"><strong>Singular values: σ₁ = √3, σ₂ = 1 (σ₃ = 0)</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">10</div><div class="q-text">Find SVD for A = [[1,1,0],[0,0,1]]</div><div class="q-badges"><span class="badge badge-co">CO 5</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div></div>
+    <div class="ans-body">
+      <ol class="steps">
+        <li>Compute \(AA^T\) (2×2):
+          \[AA^T=\begin{pmatrix}1&1&0\\0&0&1\end{pmatrix}\begin{pmatrix}1&0\\1&0\\0&1\end{pmatrix}=\begin{pmatrix}2&0\\0&1\end{pmatrix}\]</li>
+        <li>Eigenvalues: \(\lambda_1=2,\;\lambda_2=1\)</li>
+        <li>Singular values: \(\sigma_1=\sqrt{2},\;\sigma_2=1\)</li>
+        <li>\(\Sigma=\begin{pmatrix}\sqrt{2}&0&0\\0&1&0\end{pmatrix}\)</li>
+        <li>Left singular vectors: \(u_1=(1,0)^T\) for λ=2; \(u_2=(0,1)^T\) for λ=1</li>
+        <li>Right singular vectors: \(v_1=\frac{1}{\sqrt{2}}A^Tu_1=\frac{1}{\sqrt{2}}(1,1,0)^T\)</li>
+        <li>\(v_2=A^Tu_2=(0,0,1)^T\)</li>
+        <li>\(v_3\) = orthogonal complement: \(v_3=\frac{1}{\sqrt{2}}(1,-1,0)^T\)</li>
+      </ol>
+      <div class="formula-box">
+        \[U=I_2=\begin{pmatrix}1&0\\0&1\end{pmatrix},\quad\Sigma=\begin{pmatrix}\sqrt{2}&0&0\\0&1&0\end{pmatrix}\]
+        \[V=\begin{pmatrix}\frac{1}{\sqrt{2}}&0&\frac{1}{\sqrt{2}}\\\frac{1}{\sqrt{2}}&0&\frac{-1}{\sqrt{2}}\\0&1&0\end{pmatrix}\]
+      </div>
+      <div class="result-box"><strong>Singular values: σ₁ = √2, σ₂ = 1</strong><br>
+      <strong>\(A = U\Sigma V^T\) decomposition complete.</strong></div>
+    </div>
+  </div>
+
+</div>
+<footer>Module V · Linear Algebra · MCAP136 · S-VYASA University</footer>
+</body>
+</html>

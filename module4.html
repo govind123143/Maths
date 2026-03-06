@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module IV — ANOVA | MCAP136</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1209; --paper: #fdf8f0; --cream: #f5ede0;
+    --gold: #b8860b; --gold-light: #d4a843; --rust: #8b3a2a;
+    --teal: #1a5f5c; --border: #d4c4a0; --muted: #6b5e4a; --highlight: #fffbf0;
+    --mod-color: #3d1f5c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Source Serif 4', Georgia, serif; background: var(--paper); color: var(--ink); line-height: 1.75; font-size: 15px; }
+  .topnav { background: var(--ink); display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 2rem; }
+  .topnav a { color: #c8b896; font-size: 0.72rem; text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; }
+  .topnav a:hover { color: var(--gold-light); }
+  .page-links { display: flex; gap: 1rem; }
+  .page-links a { padding: 0.25rem 0.7rem; border: 1px solid #3a3020; border-radius: 20px; }
+  .page-links a.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+  .mod-header { background: var(--mod-color); color: #fff; padding: 2.5rem 4rem 2rem; position: relative; overflow: hidden; }
+  .mod-header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.04) 30px, rgba(255,255,255,0.04) 31px); }
+  .mod-inner { position: relative; max-width: 960px; margin: auto; }
+  .mod-tag { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.5rem; }
+  .mod-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 900; line-height: 1.1; }
+  .mod-header h1 span { opacity: 0.6; font-size: 0.6em; display: block; font-weight: 400; margin-top: 0.3rem; letter-spacing: 0.05em; }
+  .container { max-width: 960px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+  .q-card { border: 1px solid var(--border); border-radius: 2px; margin-bottom: 1.8rem; background: #fff; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .q-head { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.5rem; background: var(--cream); border-bottom: 1px solid var(--border); }
+  .q-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); line-height: 1; min-width: 2rem; }
+  .q-text { font-size: 0.95rem; font-weight: 600; color: var(--ink); flex: 1; }
+  .q-badges { display: flex; gap: 0.4rem; margin-left: auto; flex-shrink: 0; }
+  .badge { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.2rem 0.55rem; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .badge-co { background: #e8f4f0; color: var(--teal); border: 1px solid #b0d8d4; }
+  .badge-rbtl { background: #fff3e0; color: #b45309; border: 1px solid #fed7aa; }
+  .badge-marks { background: var(--ink); color: var(--paper); }
+  .ans-body { padding: 1.5rem 1.8rem 1.8rem; }
+  h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--teal); margin: 1rem 0 0.4rem; }
+  p { margin-bottom: 0.7rem; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 0.7rem; }
+  li { margin-bottom: 0.3rem; }
+  .formula-box { background: var(--highlight); border-left: 3px solid var(--gold); padding: 0.8rem 1.2rem; margin: 0.8rem 0; border-radius: 0 2px 2px 0; }
+  .result-box { background: #f0f8f5; border: 1px solid #b0d8d0; border-left: 4px solid var(--teal); padding: 0.7rem 1.2rem; margin: 0.8rem 0; border-radius: 0 2px 2px 0; }
+  .result-box strong { color: var(--teal); }
+  table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; font-size: 0.88rem; }
+  th { background: var(--ink); color: var(--paper); padding: 0.45rem 0.8rem; text-align: center; font-weight: 600; }
+  td { border: 1px solid var(--border); padding: 0.4rem 0.8rem; text-align: center; }
+  tr:nth-child(even) td { background: var(--cream); }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; padding: 0.5rem 0 0.5rem 2.5rem; position: relative; border-left: 2px solid var(--border); margin-left: 0.8rem; margin-bottom: 0.3rem; }
+  .steps li::before { content: counter(step); position: absolute; left: -0.9rem; top: 0.45rem; background: var(--gold); color: #fff; font-size: 0.7rem; font-weight: 700; width: 1.6rem; height: 1.6rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .part { font-weight: 600; color: var(--rust); margin-top: 0.7rem; display: block; }
+  footer { text-align: center; padding: 2rem; background: var(--ink); color: #8a7a60; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4rem; }
+  .anova-table th { background: #3d1f5c; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← Back to Home</a>
+  <div class="page-links">
+    <a href="module1.html">I</a>
+    <a href="module2.html">II</a>
+    <a href="module3.html">III</a>
+    <a href="module4.html" class="active">IV</a>
+    <a href="module5.html">V</a>
+  </div>
+</nav>
+
+<div class="mod-header">
+  <div class="mod-inner">
+    <div class="mod-tag">MCAP136 · Module IV</div>
+    <h1>Analysis of Variance (ANOVA) <span>One-Way · Two-Way · Latin Square · ANCOVA</span></h1>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">1</div><div class="q-text">State the Principles of ANOVA.</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <ul>
+        <li><strong>Replication:</strong> Each treatment is repeated several times to estimate experimental error and improve reliability.</li>
+        <li><strong>Randomisation:</strong> Experimental units are assigned to treatments randomly to eliminate systematic bias.</li>
+        <li><strong>Local Control:</strong> Units are grouped into homogeneous blocks to minimise variation from extraneous sources and improve precision.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">2</div><div class="q-text">Write any three applications of ANOVA.</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <ol>
+        <li><strong>Agriculture:</strong> Comparing crop yields under different fertilizers, irrigation methods, or seed varieties.</li>
+        <li><strong>Manufacturing / Quality Control:</strong> Comparing output or defect rates of machines from different manufacturers.</li>
+        <li><strong>Medical Research:</strong> Testing effectiveness of multiple drug treatments on patient outcomes simultaneously.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">3</div><div class="q-text">Explain the meaning of ANOVA. Describe the technique of analysis of variance.</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p><strong>ANOVA (Analysis of Variance)</strong> is a statistical technique used to compare means of three or more groups by analysing the variance within and between groups. It tests H₀: all group means are equal.</p>
+      <p><strong>Technique:</strong> Total variation (TSS) is partitioned into:</p>
+      <div class="formula-box">\[TSS = SS_{Between} + SS_{Within}\]</div>
+      <p>The F-ratio tests whether between-group variance is significantly greater than within-group variance:</p>
+      <div class="formula-box">\[F = \frac{MS_{Between}}{MS_{Within}} = \frac{SS_{Between}/(k-1)}{SS_{Within}/(N-k)}\]</div>
+      <p>If F > F_critical, reject H₀: at least one mean is different.</p>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">4</div><div class="q-text">What is meant by between-group and within-group variations?</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <h4>Between-Group Variation (SS_Between)</h4>
+      <p>Variability <em>between</em> treatment group means and the grand mean. Large value → treatments have a real effect.</p>
+      <div class="formula-box">\[SS_{Between}=\sum_j n_j(\bar{x}_j-\bar{\bar{x}})^2\]</div>
+      <h4>Within-Group Variation (SS_Within / SSE)</h4>
+      <p>Variability <em>within</em> each group due to random error. Used as the baseline (error) variance.</p>
+      <div class="formula-box">\[SS_{Within}=\sum_j\sum_i(x_{ij}-\bar{x}_j)^2\]</div>
+      <p>F-ratio = MS_Between / MS_Within. Large F → significant treatment effect.</p>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">5</div><div class="q-text">Explain the analysis procedure of Latin Square Design.</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>A <strong>Latin Square Design (LSD)</strong> controls two sources of variation simultaneously. Each treatment appears exactly once in each row and column of a \(p\times p\) square.</p>
+      <table class="anova-table">
+        <tr><th>Source</th><th>SS</th><th>d.f.</th><th>MS</th><th>F</th></tr>
+        <tr><td>Rows</td><td>SSR</td><td>p−1</td><td>MSR</td><td>MSR/MSE</td></tr>
+        <tr><td>Columns</td><td>SSC</td><td>p−1</td><td>MSC</td><td>MSC/MSE</td></tr>
+        <tr><td>Treatments</td><td>SSTr</td><td>p−1</td><td>MSTr</td><td>MSTr/MSE</td></tr>
+        <tr><td>Error</td><td>SSE</td><td>(p−1)(p−2)</td><td>MSE</td><td>—</td></tr>
+        <tr><td>Total</td><td>TSS</td><td>p²−1</td><td></td><td></td></tr>
+      </table>
+      <div class="formula-box">\[CF=T^2/N,\quad TSS=\sum\sum x_{ij}^2-CF\]</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">6</div><div class="q-text">Define ANCOVA. Differentiate between ANOVA and ANCOVA.</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p><strong>ANCOVA</strong> combines regression and ANOVA. It adjusts for the effect of a continuous covariate before comparing group means.</p>
+      <table>
+        <tr><th>ANOVA</th><th>ANCOVA</th></tr>
+        <tr><td>Compares group means</td><td>Compares adjusted means</td></tr>
+        <tr><td>No continuous covariate</td><td>Includes covariates</td></tr>
+        <tr><td>Pure experimental</td><td>Combines experimental + regression</td></tr>
+        <tr><td>May ignore confounders</td><td>Controls for confounders</td></tr>
+        <tr><td>E.g.: Test 3 drug effects</td><td>E.g.: Test effects adjusted for age</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">7</div><div class="q-text">One-way ANOVA: Three machines A1, A2, A3 (5 obs each). Are machines significantly different? (F₂,₁₂=3.89 at 5%)</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div></div>
+    <div class="ans-body">
+      <table>
+        <tr><th>Obs</th><th>A1</th><th>A2</th><th>A3</th></tr>
+        <tr><td>1</td><td>25</td><td>31</td><td>24</td></tr>
+        <tr><td>2</td><td>30</td><td>39</td><td>30</td></tr>
+        <tr><td>3</td><td>36</td><td>38</td><td>28</td></tr>
+        <tr><td>4</td><td>38</td><td>42</td><td>25</td></tr>
+        <tr><td>5</td><td>31</td><td>35</td><td>28</td></tr>
+        <tr><td><strong>Total</strong></td><td><strong>160</strong></td><td><strong>185</strong></td><td><strong>135</strong></td></tr>
+      </table>
+      <ol class="steps">
+        <li>T=480, N=15. CF=480²/15=15360</li>
+        <li>TSS=\(\sum x^2-CF\)=(625+900+1296+1444+961+961+1521+1444+1764+1225+576+900+784+625+784)−15360=15712−15360=<strong>352</strong></li>
+        <li>SS_Between=(160²+185²+135²)/5−15360=(25600+34225+18225)/5−15360=15610−15360=<strong>250</strong></li>
+        <li>SS_Within=352−250=<strong>102</strong></li>
+      </ol>
+      <table class="anova-table">
+        <tr><th>Source</th><th>SS</th><th>d.f.</th><th>MS</th><th>F</th></tr>
+        <tr><td>Between</td><td>250</td><td>2</td><td>125</td><td>125/8.5 = <strong>14.71</strong></td></tr>
+        <tr><td>Error</td><td>102</td><td>12</td><td>8.5</td><td>—</td></tr>
+        <tr><td>Total</td><td>352</td><td>14</td><td></td><td></td></tr>
+      </table>
+      <div class="result-box"><strong>F=14.71 >> 3.89. Reject H₀: Machines differ significantly in mean speed at 5% level.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">8</div><div class="q-text">Test if average yields under seeds A, B, C differ significantly at 5%. (F₂,₁₂=3.88)</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div></div>
+    <div class="ans-body">
+      <table>
+        <tr><th>A</th><th>B</th><th>C</th></tr>
+        <tr><td>20</td><td>18</td><td>25</td></tr>
+        <tr><td>21</td><td>20</td><td>28</td></tr>
+        <tr><td>23</td><td>17</td><td>22</td></tr>
+        <tr><td>16</td><td>25</td><td>28</td></tr>
+        <tr><td>20</td><td>15</td><td>32</td></tr>
+        <tr><td><strong>100</strong></td><td><strong>95</strong></td><td><strong>135</strong></td></tr>
+      </table>
+      <ol class="steps">
+        <li>T=330, N=15. CF=330²/15=7260</li>
+        <li>TSS=\(\sum x^2\)−7260=7690−7260=<strong>430</strong></li>
+        <li>SS_Between=(100²+95²+135²)/5−7260=(10000+9025+18225)/5−7260=7450−7260=<strong>190</strong></li>
+        <li>SS_Within=430−190=<strong>240</strong></li>
+      </ol>
+      <table class="anova-table">
+        <tr><th>Source</th><th>SS</th><th>d.f.</th><th>MS</th><th>F</th></tr>
+        <tr><td>Between</td><td>190</td><td>2</td><td>95</td><td><strong>4.75</strong></td></tr>
+        <tr><td>Error</td><td>240</td><td>12</td><td>20</td><td>—</td></tr>
+        <tr><td>Total</td><td>430</td><td>14</td><td></td><td></td></tr>
+      </table>
+      <div class="result-box"><strong>F=4.75 > 3.88. Reject H₀: Yields differ significantly under different seed varieties.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">9</div><div class="q-text">Perform ANOVA on the data (3 treatments × 5 blocks). (F₂,₈=1.12, F₄,₈=1.64 at 5%)</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div></div>
+    <div class="ans-body">
+      <table>
+        <tr><th>Block</th><th>T1</th><th>T2</th><th>T3</th><th>Row Total</th></tr>
+        <tr><td>1</td><td>30</td><td>26</td><td>38</td><td>94</td></tr>
+        <tr><td>2</td><td>24</td><td>29</td><td>28</td><td>81</td></tr>
+        <tr><td>3</td><td>33</td><td>24</td><td>35</td><td>92</td></tr>
+        <tr><td>4</td><td>36</td><td>31</td><td>30</td><td>97</td></tr>
+        <tr><td>5</td><td>27</td><td>35</td><td>33</td><td>95</td></tr>
+        <tr><td><strong>Col Total</strong></td><td><strong>150</strong></td><td><strong>145</strong></td><td><strong>164</strong></td><td><strong>459</strong></td></tr>
+      </table>
+      <ol class="steps">
+        <li>N=15, T=459. CF=459²/15=14043.6</li>
+        <li>TSS=\(\sum x^2\)−CF=(900+576+1089+1296+729+676+841+576+961+1225+1444+784+1225+900+1089)−14043.6=14311−14043.6=<strong>267.4</strong></li>
+        <li>SS_Treatments=(150²+145²+164²)/5−CF=(22500+21025+26896)/5−14043.6=14084.2−14043.6=<strong>40.6</strong></li>
+        <li>SS_Blocks=(94²+81²+92²+97²+95²)/3−CF=(8836+6561+8464+9409+9025)/3−14043.6=14098.33−14043.6=<strong>54.73</strong></li>
+        <li>SSE=267.4−40.6−54.73=<strong>172.07</strong></li>
+      </ol>
+      <table class="anova-table">
+        <tr><th>Source</th><th>SS</th><th>d.f.</th><th>MS</th><th>F</th></tr>
+        <tr><td>Treatments</td><td>40.6</td><td>2</td><td>20.3</td><td>20.3/21.51 = <strong>0.943</strong></td></tr>
+        <tr><td>Blocks</td><td>54.73</td><td>4</td><td>13.68</td><td>13.68/21.51 = <strong>0.636</strong></td></tr>
+        <tr><td>Error</td><td>172.07</td><td>8</td><td>21.51</td><td>—</td></tr>
+        <tr><td>Total</td><td>267.4</td><td>14</td><td></td><td></td></tr>
+      </table>
+      <div class="result-box"><strong>Treatments: F=0.943 &lt; 1.12 → Not significant. Blocks: F=0.636 &lt; 1.64 → Not significant.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">10</div><div class="q-text">Two-way ANOVA: Seeds (W,X,Y,Z) vs Fertilizers (A,B,C). Test variety differences at 5%. (F₂,₆=5.14, F₃,₆=4.76)</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div></div>
+    <div class="ans-body">
+      <table>
+        <tr><th>Seed\Fert</th><th>A</th><th>B</th><th>C</th><th>Row Total</th></tr>
+        <tr><td>W</td><td>6</td><td>5</td><td>5</td><td>16</td></tr>
+        <tr><td>X</td><td>7</td><td>5</td><td>4</td><td>16</td></tr>
+        <tr><td>Y</td><td>3</td><td>3</td><td>3</td><td>9</td></tr>
+        <tr><td>Z</td><td>8</td><td>7</td><td>5</td><td>20</td></tr>
+        <tr><td><strong>Col Total</strong></td><td><strong>24</strong></td><td><strong>20</strong></td><td><strong>17</strong></td><td><strong>61</strong></td></tr>
+      </table>
+      <ol class="steps">
+        <li>N=12. CF=61²/12=310.083</li>
+        <li>TSS=341−310.083=<strong>30.917</strong></li>
+        <li>SS_Rows(Seeds)=(16²+16²+9²+20²)/3−CF=331−310.083=<strong>20.917</strong></li>
+        <li>SS_Cols(Fert)=(24²+20²+17²)/4−CF=316.25−310.083=<strong>6.167</strong></li>
+        <li>SSE=30.917−20.917−6.167=<strong>3.833</strong></li>
+      </ol>
+      <table class="anova-table">
+        <tr><th>Source</th><th>SS</th><th>d.f.</th><th>MS</th><th>F</th></tr>
+        <tr><td>Seeds (Rows)</td><td>20.917</td><td>3</td><td>6.972</td><td><strong>10.91</strong></td></tr>
+        <tr><td>Fertilizer (Cols)</td><td>6.167</td><td>2</td><td>3.083</td><td><strong>4.83</strong></td></tr>
+        <tr><td>Error</td><td>3.833</td><td>6</td><td>0.639</td><td>—</td></tr>
+        <tr><td>Total</td><td>30.917</td><td>11</td><td></td><td></td></tr>
+      </table>
+      <div class="result-box">
+        <strong>Seeds: F=10.91 > F₃,₆=4.76 → Significant difference between seed varieties.</strong><br>
+        <strong>Fertilizer: F=4.83 &lt; F₂,₆=5.14 → No significant difference between fertilizers.</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">11</div><div class="q-text">Latin Square Design: Analyse variance in 4×4 paddy yield data (methods A,B,C,D). (F₃,₆=4.76)</div><div class="q-badges"><span class="badge badge-co">CO 4</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div></div>
+    <div class="ans-body">
+      <p>Given Latin Square (4×4) yields in kg:</p>
+      <table>
+        <tr><td>D=122</td><td>A=121</td><td>C=123</td><td>B=122</td></tr>
+        <tr><td>B=124</td><td>C=123</td><td>A=122</td><td>D=125</td></tr>
+        <tr><td>A=120</td><td>B=119</td><td>D=120</td><td>C=121</td></tr>
+        <tr><td>C=122</td><td>D=123</td><td>B=121</td><td>A=122</td></tr>
+      </table>
+      <ol class="steps">
+        <li>T=\(\sum\) all = 122+121+123+122+124+123+122+125+120+119+120+121+122+123+121+122=1930. N=16</li>
+        <li>CF=1930²/16=232562.5</li>
+        <li>TSS=\(\sum x^2\)−CF=(14884+14641+15129+14884+15376+15129+14884+15625+14400+14161+14400+14641+14884+15129+14641+14884)−232562.5=232696−232562.5=<strong>133.5</strong></li>
+        <li>Row totals: R1=488, R2=494, R3=480, R4=488. SS_Rows=(488²+494²+480²+488²)/4−CF=232590−232562.5=<strong>27.5</strong></li>
+        <li>Col totals: C1=488, C2=486, C3=486, C4=490. SS_Cols=(488²+486²+486²+490²)/4−CF=232565−232562.5=<strong>2.5</strong></li>
+        <li>Treatment totals: A=121+122+120+122=485, B=122+124+119+121=486, C=123+123+121+122=489, D=122+125+120+123=490. SS_Treat=(485²+486²+489²+490²)/4−CF=232569.5−232562.5=<strong>7.0</strong></li>
+        <li>SSE=133.5−27.5−2.5−7.0=<strong>96.5</strong></li>
+      </ol>
+      <table class="anova-table">
+        <tr><th>Source</th><th>SS</th><th>d.f.</th><th>MS</th><th>F</th></tr>
+        <tr><td>Rows</td><td>27.5</td><td>3</td><td>9.17</td><td>9.17/16.08 = 0.57</td></tr>
+        <tr><td>Columns</td><td>2.5</td><td>3</td><td>0.83</td><td>0.052</td></tr>
+        <tr><td>Treatments</td><td>7.0</td><td>3</td><td>2.33</td><td>2.33/16.08 = <strong>0.145</strong></td></tr>
+        <tr><td>Error</td><td>96.5</td><td>6</td><td>16.08</td><td>—</td></tr>
+        <tr><td>Total</td><td>133.5</td><td>15</td><td></td><td></td></tr>
+      </table>
+      <div class="result-box"><strong>F=0.145 &lt;&lt; F₃,₆=4.76. Accept H₀: No significant difference between cultivation methods.</strong></div>
+    </div>
+  </div>
+
+</div>
+<footer>Module IV · ANOVA · MCAP136 · S-VYASA University</footer>
+</body>
+</html>

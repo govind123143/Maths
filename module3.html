@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module III — Small Sample Tests | MCAP136</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1209; --paper: #fdf8f0; --cream: #f5ede0;
+    --gold: #b8860b; --gold-light: #d4a843; --rust: #8b3a2a;
+    --teal: #1a5f5c; --border: #d4c4a0; --muted: #6b5e4a; --highlight: #fffbf0;
+    --mod-color: #2c3e6b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Source Serif 4', Georgia, serif; background: var(--paper); color: var(--ink); line-height: 1.75; font-size: 15px; }
+  .topnav { background: var(--ink); display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 2rem; }
+  .topnav a { color: #c8b896; font-size: 0.72rem; text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; }
+  .topnav a:hover { color: var(--gold-light); }
+  .page-links { display: flex; gap: 1rem; }
+  .page-links a { padding: 0.25rem 0.7rem; border: 1px solid #3a3020; border-radius: 20px; }
+  .page-links a.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+  .mod-header { background: var(--mod-color); color: #fff; padding: 2.5rem 4rem 2rem; position: relative; overflow: hidden; }
+  .mod-header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.04) 30px, rgba(255,255,255,0.04) 31px); }
+  .mod-inner { position: relative; max-width: 960px; margin: auto; }
+  .mod-tag { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.5rem; }
+  .mod-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 900; line-height: 1.1; }
+  .mod-header h1 span { opacity: 0.6; font-size: 0.6em; display: block; font-weight: 400; margin-top: 0.3rem; letter-spacing: 0.05em; }
+  .container { max-width: 960px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+  .q-card { border: 1px solid var(--border); border-radius: 2px; margin-bottom: 1.8rem; background: #fff; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .q-head { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.5rem; background: var(--cream); border-bottom: 1px solid var(--border); }
+  .q-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); line-height: 1; min-width: 2rem; }
+  .q-text { font-size: 0.95rem; font-weight: 600; color: var(--ink); flex: 1; }
+  .q-badges { display: flex; gap: 0.4rem; margin-left: auto; flex-shrink: 0; }
+  .badge { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.2rem 0.55rem; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .badge-co { background: #e8f4f0; color: var(--teal); border: 1px solid #b0d8d4; }
+  .badge-rbtl { background: #fff3e0; color: #b45309; border: 1px solid #fed7aa; }
+  .badge-marks { background: var(--ink); color: var(--paper); }
+  .ans-body { padding: 1.5rem 1.8rem 1.8rem; }
+  h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--teal); margin: 1rem 0 0.4rem; }
+  p { margin-bottom: 0.7rem; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 0.7rem; }
+  li { margin-bottom: 0.3rem; }
+  .formula-box { background: var(--highlight); border-left: 3px solid var(--gold); padding: 0.8rem 1.2rem; margin: 0.8rem 0; border-radius: 0 2px 2px 0; }
+  .result-box { background: #f0f8f5; border: 1px solid #b0d8d0; border-left: 4px solid var(--teal); padding: 0.7rem 1.2rem; margin: 0.8rem 0; border-radius: 0 2px 2px 0; }
+  .result-box strong { color: var(--teal); }
+  table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; font-size: 0.88rem; }
+  th { background: var(--ink); color: var(--paper); padding: 0.45rem 0.8rem; text-align: center; font-weight: 600; }
+  td { border: 1px solid var(--border); padding: 0.4rem 0.8rem; text-align: center; }
+  tr:nth-child(even) td { background: var(--cream); }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; padding: 0.5rem 0 0.5rem 2.5rem; position: relative; border-left: 2px solid var(--border); margin-left: 0.8rem; margin-bottom: 0.3rem; }
+  .steps li::before { content: counter(step); position: absolute; left: -0.9rem; top: 0.45rem; background: var(--gold); color: #fff; font-size: 0.7rem; font-weight: 700; width: 1.6rem; height: 1.6rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .part { font-weight: 600; color: var(--rust); margin-top: 0.7rem; display: block; }
+  footer { text-align: center; padding: 2rem; background: var(--ink); color: #8a7a60; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4rem; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← Back to Home</a>
+  <div class="page-links">
+    <a href="module1.html">I</a>
+    <a href="module2.html">II</a>
+    <a href="module3.html" class="active">III</a>
+    <a href="module4.html">IV</a>
+    <a href="module5.html">V</a>
+  </div>
+</nav>
+
+<div class="mod-header">
+  <div class="mod-inner">
+    <div class="mod-tag">MCAP136 · Module III</div>
+    <h1>Small Sample Tests <span>Student's t-Test · Chi-Square · F-Test</span></h1>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">1</div><div class="q-text">Explain student's t-test. Mention one practical situation.</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>The <strong>Student's t-test</strong> is used for testing hypotheses about population means when \(n < 30\) and population SD is unknown.</p>
+      <div class="formula-box">\[t=\frac{\bar{x}-\mu}{s/\sqrt{n}},\quad s=\sqrt{\frac{\sum(x_i-\bar{x})^2}{n-1}},\quad \nu=n-1\text{ d.f.}\]</div>
+      <p><strong>Practical situation:</strong> Testing whether a new drug reduces blood pressure, using 15 patients.</p>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">2</div><div class="q-text">Find t for sample: −4,−2,−2,0,2,2,3,3 with population mean = 0.</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <ol class="steps">
+        <li>\(n=8,\;\sum x=2,\;\bar{x}=0.25\)</li>
+        <li>\(\sum x^2=16+4+4+0+4+4+9+9=50\)</li>
+        <li>\(s^2=\dfrac{50-8(0.0625)}{7}=\dfrac{49.5}{7}=7.071\implies s=2.659\)</li>
+        <li>\(t=\dfrac{0.25-0}{2.659/\sqrt{8}}=\dfrac{0.25}{0.9401}=0.266\)</li>
+      </ol>
+      <div class="result-box"><strong>t = 0.266 with 7 degrees of freedom</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">3</div><div class="q-text">Explain the procedure for testing of hypothesis.</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <ol class="steps">
+        <li><strong>Formulate Hypotheses:</strong> State H₀ (null) and H₁ (alternative).</li>
+        <li><strong>Choose Level of Significance (α):</strong> Typically 5% or 1%.</li>
+        <li><strong>Select the Test:</strong> Choose z, t, χ², or F based on sample size and data type.</li>
+        <li><strong>Compute Test Statistic:</strong> Calculate from sample data.</li>
+        <li><strong>Find Critical Value:</strong> From statistical tables at chosen α.</li>
+        <li><strong>Decision:</strong> Reject H₀ if statistic falls in critical region.</li>
+        <li><strong>Conclusion:</strong> State result in context of the original problem.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">4</div><div class="q-text">Die thrown 264 times. Frequencies: 40,32,28,58,54,60. Calculate χ².</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>Expected: E = 264/6 = 44 for each face.</p>
+      <table>
+        <tr><th>x</th><th>O</th><th>E</th><th>(O−E)²/E</th></tr>
+        <tr><td>1</td><td>40</td><td>44</td><td>0.364</td></tr>
+        <tr><td>2</td><td>32</td><td>44</td><td>3.273</td></tr>
+        <tr><td>3</td><td>28</td><td>44</td><td>5.818</td></tr>
+        <tr><td>4</td><td>58</td><td>44</td><td>4.455</td></tr>
+        <tr><td>5</td><td>54</td><td>44</td><td>2.273</td></tr>
+        <tr><td>6</td><td>60</td><td>44</td><td>5.818</td></tr>
+      </table>
+      <div class="formula-box">\(\chi^2=\sum(O-E)^2/E = 22.0\)</div>
+      <div class="result-box"><strong>χ² = 22.0 with 5 d.f. &nbsp;(Critical 11.07 → Die is biased)</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">5</div><div class="q-text">Explain the Chi-square test for goodness of fit.</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>Tests whether observed frequencies match a hypothesised theoretical distribution.</p>
+      <div class="formula-box">\[\chi^2=\sum_{i=1}^k\frac{(O_i-E_i)^2}{E_i},\quad \nu=k-1-m\]</div>
+      <ul>
+        <li>\(O_i\) = observed, \(E_i\) = expected frequency, \(m\) = estimated parameters</li>
+        <li>Each \(E_i \geq 5\) (combine classes if not)</li>
+        <li>If χ² > critical value → reject H₀ (poor fit)</li>
+        <li>If χ² ≤ critical value → accept H₀ (good fit)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">6</div><div class="q-text">Explain F-distribution and mention its key properties.</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>The <strong>F-distribution</strong> is the ratio of two independent chi-square variables divided by their degrees of freedom.</p>
+      <div class="formula-box">\[F=\frac{s_1^2}{s_2^2}\text{ with }(n_1-1,\;n_2-1)\text{ d.f.}\]</div>
+      <ul>
+        <li>F ≥ 0 always</li>
+        <li>Positively skewed distribution</li>
+        <li>Defined by two d.f. parameters: ν₁ and ν₂</li>
+        <li>Mean = ν₂/(ν₂−2) for ν₂ > 2</li>
+        <li>Used for F-test and ANOVA</li>
+        <li>Reciprocal property: \(F_{\alpha,\nu_1,\nu_2}=1/F_{\alpha,\nu_2,\nu_1}\)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">7</div><div class="q-text">What is degree of freedom? Write d.f. for t-test.</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p><strong>Degrees of freedom (d.f.)</strong> is the number of independent values that can freely vary in a statistical calculation.</p>
+      <ul>
+        <li><strong>One-sample t-test:</strong> \(\nu = n-1\)</li>
+        <li><strong>Two-sample (independent) t-test:</strong> \(\nu = n_1+n_2-2\)</li>
+        <li><strong>Paired t-test:</strong> \(\nu = n-1\) (where n = number of pairs)</li>
+      </ul>
+      <p>Degrees of freedom determine the shape of the t-distribution. As d.f. → ∞, t-distribution → standard normal.</p>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">8</div><div class="q-text">Define a parametric test and give two examples.</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>A <strong>parametric test</strong> is a statistical test that makes specific assumptions about the population from which the sample is drawn, particularly that the data follows a known distribution (usually normal) with specific parameters.</p>
+      <p><strong>Assumptions:</strong> Normal distribution, continuous data, known/estimated variance.</p>
+      <p><strong>Examples:</strong></p>
+      <ol>
+        <li><strong>Student's t-test:</strong> Tests if sample mean equals a hypothesised population mean, assuming normal distribution.</li>
+        <li><strong>z-test:</strong> Tests means or proportions for large samples, assuming the sampling distribution is normal.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">9</div><div class="q-text">12 patients: BP changes = 5,2,8,−1,3,0,6,−2,1,5,0,4. Does stimulus change BP? [t₀.₀₅(11)=2.201]</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: μ=0. H₁: μ≠0.</p>
+      <ol class="steps">
+        <li>\(n=12,\;\sum x=31,\;\bar{x}=31/12=2.583\)</li>
+        <li>\(\sum x^2=25+4+64+1+9+0+36+4+1+25+0+16=185\)</li>
+        <li>\(s^2=(185-12\times6.673)/11=(185-80.08)/11=9.538,\;s=3.088\)</li>
+        <li>\(t=\dfrac{2.583}{3.088/\sqrt{12}}=\dfrac{2.583}{0.8916}=2.898\)</li>
+        <li>|t|=2.898 > 2.201</li>
+      </ol>
+      <div class="result-box"><strong>Reject H₀: Stimulus significantly changes blood pressure at 5% level.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">10</div><div class="q-text">Diet A (n=10): 5,6,8,1,12,4,3,9,6,10. Diet B (n=8): 2,3,6,8,10,1,2,8. Test if diets differ significantly. (t₀.₀₅,16 d.f=2.12)</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: μ_A=μ_B. Two-sample t-test.</p>
+      <ol class="steps">
+        <li>\(\bar{x}_A=64/10=6.4,\;\bar{x}_B=40/8=5.0\)</li>
+        <li>\(\sum x_A^2=512,\;\sum x_B^2=282\)</li>
+        <li>Pooled: \(s^2=\dfrac{(512-10\times40.96)+(282-8\times25)}{16}=\dfrac{102.4+82}{16}=11.525\)</li>
+        <li>\(t=\dfrac{6.4-5.0}{\sqrt{11.525(1/10+1/8)}}=\dfrac{1.4}{\sqrt{2.593}}=\dfrac{1.4}{1.610}=0.869\)</li>
+        <li>|t|=0.869 &lt; 2.12</li>
+      </ol>
+      <div class="result-box"><strong>Accept H₀: No significant difference in weight gains between Diet A and Diet B.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">11</div><div class="q-text">Horse A: 28,30,32,33,33,29,34. Horse B: 29,30,30,24,27,29. Discriminate between horses. (t₀.₀₅,11 d.f=2.2)</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: μ_A=μ_B. Two-sample t-test.</p>
+      <ol class="steps">
+        <li>\(n_A=7,\;\bar{x}_A=219/7=31.29\)</li>
+        <li>\(n_B=6,\;\bar{x}_B=169/6=28.17\)</li>
+        <li>\(\sum x_A^2=6863,\;\sum x_B^2=4811\)</li>
+        <li>\(s^2=\dfrac{(6863-7\times979.08)+(4811-6\times793.65)}{11}=\dfrac{(6863-6853.56)+(4811-4761.9)}{11}=\dfrac{9.44+49.1}{11}=5.322\)</li>
+        <li>\(s=2.307\)</li>
+        <li>\(t=\dfrac{31.29-28.17}{2.307\sqrt{1/7+1/6}}=\dfrac{3.12}{2.307\times0.5503}=\dfrac{3.12}{1.269}=2.458\)</li>
+        <li>|t|=2.458 > 2.2</li>
+      </ol>
+      <div class="result-box"><strong>Reject H₀: There is a significant difference between the two horses at 5% level.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">12</div><div class="q-text">5 fair coins tossed 320 times. Test if data follows Binomial distribution. (χ²₀.₀₅,5 d.f=11.07)</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: Data follows B(5, 0.5). Expected = 320 × P(X=r).</p>
+      <table>
+        <tr><th>Heads</th><th>Observed</th><th>P(X=r)</th><th>Expected</th><th>(O−E)²/E</th></tr>
+        <tr><td>0</td><td>6</td><td>0.03125</td><td>10</td><td>1.600</td></tr>
+        <tr><td>1</td><td>27</td><td>0.15625</td><td>50</td><td>10.580</td></tr>
+        <tr><td>2</td><td>72</td><td>0.31250</td><td>100</td><td>7.840</td></tr>
+        <tr><td>3</td><td>112</td><td>0.31250</td><td>100</td><td>1.440</td></tr>
+        <tr><td>4</td><td>71</td><td>0.15625</td><td>50</td><td>8.820</td></tr>
+        <tr><td>5</td><td>32</td><td>0.03125</td><td>10</td><td>48.400</td></tr>
+      </table>
+      <div class="formula-box">\(\chi^2=1.6+10.58+7.84+1.44+8.82+48.4=78.68\)</div>
+      <div class="result-box"><strong>χ²=78.68 >> 11.07. Reject H₀: Data does NOT follow Binomial distribution.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">13</div><div class="q-text">Fit Poisson distribution and test goodness of fit at 5%. (χ²₀.₀₅(3)=7.82)</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>Data: x=0,1,2,3,4; f=419,352,154,56,16. N=997.</p>
+      <ol class="steps">
+        <li>\(\lambda=\bar{x}=(0+352+308+168+64)/997=892/997=0.895\)</li>
+        <li>\(e^{-0.895}=0.4085\)</li>
+      </ol>
+      <table>
+        <tr><th>x</th><th>Observed</th><th>Expected</th><th>(O−E)²/E</th></tr>
+        <tr><td>0</td><td>419</td><td>407.3</td><td>0.336</td></tr>
+        <tr><td>1</td><td>352</td><td>364.5</td><td>0.429</td></tr>
+        <tr><td>2</td><td>154</td><td>163.1</td><td>0.508</td></tr>
+        <tr><td>3+4</td><td>72</td><td>62.1</td><td>1.575</td></tr>
+      </table>
+      <div class="formula-box">\(\chi^2=0.336+0.429+0.508+1.575=2.848\)</div>
+      <div class="result-box"><strong>χ²=2.848 &lt; 7.82. Accept H₀: Poisson distribution is a good fit.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">14</div><div class="q-text">Worker A: 40,30,38,41,38,35. Worker B: 39,38,41,33,32,49,49,34. Is A more stable than B? (F₀.₀₅,7,5=4.88)</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: σ²_A=σ²_B. H₁: σ²_A &lt; σ²_B. Use F-test on variances.</p>
+      <ol class="steps">
+        <li>A: \(n_1=6,\;\bar{x}_A=222/6=37\). \(S_A^2=(9+49+1+16+1+4)/5=80/5=16\)</li>
+        <li>B: \(n_2=8,\;\bar{x}_B=315/8=39.375\). \(S_B^2\approx53.55\)</li>
+        <li>\(F=S_B^2/S_A^2=53.55/16=3.347\)</li>
+        <li>d.f.=(7,5). \(F=3.347 < F_{0.05,7,5}=4.88\)</li>
+      </ol>
+      <div class="result-box"><strong>Accept H₀: Cannot conclude A is more stable than B at 5% level.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">15</div><div class="q-text">Batsman A: 40,50,35,25,60,70,65,55. Batsman B: 60,70,40,30,50. Is A more consistent than B? (F₀.₀₁,4,7=7.85)</div><div class="q-badges"><span class="badge badge-co">CO 3</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: σ²_A=σ²_B. H₁: σ²_A &lt; σ²_B.</p>
+      <ol class="steps">
+        <li>A: \(n_1=8,\;\bar{x}_A=400/8=50\). \(S_A^2=\sum(x-50)^2/7=(100+0+225+625+100+400+225+25)/7=1700/7=242.86\)</li>
+        <li>B: \(n_2=5,\;\bar{x}_B=250/5=50\). \(S_B^2=(100+400+100+400+0)/4=1000/4=250\)</li>
+        <li>\(F=S_B^2/S_A^2=250/242.86=1.029\)</li>
+        <li>d.f.=(4,7). \(F=1.029 << 7.85\)</li>
+      </ol>
+      <div class="result-box"><strong>Accept H₀: No significant difference in consistency. Cannot conclude A is more consistent than B at 1% level.</strong></div>
+    </div>
+  </div>
+
+</div>
+<footer>Module III · Small Sample Tests · MCAP136 · S-VYASA University</footer>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computational Mathematics — MCAP136</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1209;
+    --paper: #fdf8f0;
+    --gold: #b8860b;
+    --gold-light: #d4a843;
+    --border: #d4c4a0;
+    --muted: #6b5e4a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3.5rem 4rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(180,134,11,0.07) 30px, rgba(180,134,11,0.07) 31px);
+  }
+  .header-inner { position: relative; max-width: 900px; margin: auto; }
+  .univ { font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 1rem; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; line-height: 1.1; }
+  h1 span { color: var(--gold-light); }
+  .meta { display: flex; gap: 2rem; margin-top: 1.2rem; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: #c8b896; }
+
+  main { max-width: 900px; margin: 4rem auto; padding: 0 2rem 4rem; }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.6rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; }
+
+  .card {
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    padding: 2rem 1.8rem;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    background: #fff;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transition: transform 0.2s;
+    transform-origin: bottom;
+  }
+  .card:hover { border-color: var(--gold); box-shadow: 0 4px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
+  .card:hover::before { transform: scaleY(1); }
+  .card-num { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 900; color: var(--gold); opacity: 0.18; line-height: 1; margin-bottom: 0.5rem; }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .card-subtitle { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+  .card-tag { display: inline-block; margin-top: 1.2rem; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.7rem; border: 1px solid var(--border); border-radius: 20px; color: var(--muted); }
+
+  footer { text-align: center; padding: 2rem; background: var(--ink); color: #8a7a60; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4rem; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="univ">S-VYASA · Deemed University · PG (MCA)</div>
+    <h1>Computational <span>Mathematics</span></h1>
+    <div class="meta">
+      <span>Course Code: MCAP136</span>
+      <span>Answer Bank — 5 Modules</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <h2>Select a Module</h2>
+  <div class="grid">
+    <a class="card" href="module1.html">
+      <div class="card-num">I</div>
+      <div class="card-title">Probability Distributions</div>
+      <div class="card-subtitle">Binomial · Poisson · Normal · Exponential · PMF · PDF · Mean · Variance</div>
+      <span class="card-tag">17 Questions</span>
+    </a>
+    <a class="card" href="module2.html">
+      <div class="card-num">II</div>
+      <div class="card-title">Large Sample Tests</div>
+      <div class="card-subtitle">Hypothesis Testing · z-Test · Confidence Intervals · Type I & II Errors</div>
+      <span class="card-tag">15 Questions</span>
+    </a>
+    <a class="card" href="module3.html">
+      <div class="card-num">III</div>
+      <div class="card-title">Small Sample Tests</div>
+      <div class="card-subtitle">Student's t-Test · Chi-Square · F-Test · Goodness of Fit</div>
+      <span class="card-tag">15 Questions</span>
+    </a>
+    <a class="card" href="module4.html">
+      <div class="card-num">IV</div>
+      <div class="card-title">Analysis of Variance</div>
+      <div class="card-subtitle">One-Way · Two-Way ANOVA · Latin Square Design · ANCOVA</div>
+      <span class="card-tag">11 Questions</span>
+    </a>
+    <a class="card" href="module5.html">
+      <div class="card-num">V</div>
+      <div class="card-title">Linear Algebra</div>
+      <div class="card-subtitle">Determinants · Matrix Products · LU Decomposition · Eigenvalues · SVD</div>
+      <span class="card-tag">10 Questions</span>
+    </a>
+  </div>
+</main>
+
+<footer>MCAP136 · Computational Mathematics · S-VYASA University</footer>
+</body>
+</html>

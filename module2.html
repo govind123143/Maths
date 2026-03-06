@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module II — Large Sample Tests | MCAP136</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1209; --paper: #fdf8f0; --cream: #f5ede0;
+    --gold: #b8860b; --gold-light: #d4a843; --rust: #8b3a2a;
+    --teal: #1a5f5c; --border: #d4c4a0; --muted: #6b5e4a; --highlight: #fffbf0;
+    --mod-color: #6b2d0f;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Source Serif 4', Georgia, serif; background: var(--paper); color: var(--ink); line-height: 1.75; font-size: 15px; }
+  .topnav { background: var(--ink); display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 2rem; }
+  .topnav a { color: #c8b896; font-size: 0.72rem; text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; }
+  .topnav a:hover { color: var(--gold-light); }
+  .page-links { display: flex; gap: 1rem; }
+  .page-links a { padding: 0.25rem 0.7rem; border: 1px solid #3a3020; border-radius: 20px; }
+  .page-links a.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+  .mod-header { background: var(--mod-color); color: #fff; padding: 2.5rem 4rem 2rem; position: relative; overflow: hidden; }
+  .mod-header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.04) 30px, rgba(255,255,255,0.04) 31px); }
+  .mod-inner { position: relative; max-width: 960px; margin: auto; }
+  .mod-tag { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.5rem; }
+  .mod-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 900; line-height: 1.1; }
+  .mod-header h1 span { opacity: 0.6; font-size: 0.6em; display: block; font-weight: 400; margin-top: 0.3rem; letter-spacing: 0.05em; }
+  .container { max-width: 960px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+  .q-card { border: 1px solid var(--border); border-radius: 2px; margin-bottom: 1.8rem; background: #fff; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .q-head { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.5rem; background: var(--cream); border-bottom: 1px solid var(--border); }
+  .q-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); line-height: 1; min-width: 2rem; }
+  .q-text { font-size: 0.95rem; font-weight: 600; color: var(--ink); flex: 1; }
+  .q-badges { display: flex; gap: 0.4rem; margin-left: auto; flex-shrink: 0; }
+  .badge { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.2rem 0.55rem; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .badge-co { background: #e8f4f0; color: var(--teal); border: 1px solid #b0d8d4; }
+  .badge-rbtl { background: #fff3e0; color: #b45309; border: 1px solid #fed7aa; }
+  .badge-marks { background: var(--ink); color: var(--paper); }
+  .ans-body { padding: 1.5rem 1.8rem 1.8rem; }
+  h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--teal); margin: 1rem 0 0.4rem; }
+  p { margin-bottom: 0.7rem; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 0.7rem; }
+  li { margin-bottom: 0.3rem; }
+  .formula-box { background: var(--highlight); border-left: 3px solid var(--gold); padding: 0.8rem 1.2rem; margin: 0.8rem 0; border-radius: 0 2px 2px 0; }
+  .result-box { background: #f0f8f5; border: 1px solid #b0d8d0; border-left: 4px solid var(--teal); padding: 0.7rem 1.2rem; margin: 0.8rem 0; border-radius: 0 2px 2px 0; }
+  .result-box strong { color: var(--teal); }
+  table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; font-size: 0.88rem; }
+  th { background: var(--ink); color: var(--paper); padding: 0.45rem 0.8rem; text-align: center; font-weight: 600; }
+  td { border: 1px solid var(--border); padding: 0.4rem 0.8rem; text-align: center; }
+  tr:nth-child(even) td { background: var(--cream); }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; padding: 0.5rem 0 0.5rem 2.5rem; position: relative; border-left: 2px solid var(--border); margin-left: 0.8rem; margin-bottom: 0.3rem; }
+  .steps li::before { content: counter(step); position: absolute; left: -0.9rem; top: 0.45rem; background: var(--gold); color: #fff; font-size: 0.7rem; font-weight: 700; width: 1.6rem; height: 1.6rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .part { font-weight: 600; color: var(--rust); margin-top: 0.7rem; display: block; }
+  footer { text-align: center; padding: 2rem; background: var(--ink); color: #8a7a60; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4rem; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← Back to Home</a>
+  <div class="page-links">
+    <a href="module1.html">I</a>
+    <a href="module2.html" class="active">II</a>
+    <a href="module3.html">III</a>
+    <a href="module4.html">IV</a>
+    <a href="module5.html">V</a>
+  </div>
+</nav>
+
+<div class="mod-header">
+  <div class="mod-inner">
+    <div class="mod-tag">MCAP136 · Module II</div>
+    <h1>Large Sample Tests <span>Hypothesis Testing · z-Test · Confidence Intervals</span></h1>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">1</div><div class="q-text">Define large sample test. When is it applicable?</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>A <strong>large sample test (z-test)</strong> is used when sample size \(n \geq 30\). By the Central Limit Theorem, the sampling distribution is approximately normal.</p>
+      <div class="formula-box">\[Z = \frac{\bar{x}-\mu}{\sigma/\sqrt{n}} \sim N(0,1)\]</div>
+      <p><strong>Applicable when:</strong> \(n \geq 30\), population SD known, testing means/proportions. Critical values: ±1.96 (5%), ±2.576 (1%) for two-tailed tests.</p>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">2</div><div class="q-text">Explain i) Type-I and Type-II error ii) Hypothesis.</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <h4>Hypothesis</h4>
+      <ul>
+        <li><strong>Null Hypothesis (H₀):</strong> Assumes no difference/effect. Tested for rejection.</li>
+        <li><strong>Alternative Hypothesis (H₁):</strong> Contradicts H₀; accepted if H₀ is rejected.</li>
+      </ul>
+      <h4>Type-I Error (α)</h4>
+      <p>Rejecting H₀ when it is actually <em>true</em>. Also called <em>false positive</em>. Probability = level of significance α.</p>
+      <h4>Type-II Error (β)</h4>
+      <p>Failing to reject H₀ when it is <em>false</em>. Also called <em>false negative</em>. Power of test = 1 − β.</p>
+      <table>
+        <tr><th>Decision</th><th>H₀ True</th><th>H₀ False</th></tr>
+        <tr><td>Reject H₀</td><td>Type I Error (α)</td><td>Correct (Power)</td></tr>
+        <tr><td>Accept H₀</td><td>Correct</td><td>Type II Error (β)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">3</div><div class="q-text">What is meant by 5% and 1% level of significance?</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>The <strong>level of significance (α)</strong> is the probability of committing a Type-I error.</p>
+      <ul>
+        <li><strong>5% level (α=0.05):</strong> H₀ rejected if probability of result < 5%. Critical value: ±1.96. 5% risk of false rejection.</li>
+        <li><strong>1% level (α=0.01):</strong> Stricter. H₀ rejected only if probability < 1%. Critical value: ±2.576. 1% risk of false rejection.</li>
+      </ul>
+      <p>Lower significance → stricter test → less Type-I error, but higher risk of Type-II error.</p>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">4</div><div class="q-text">In 324 throws of a die, odd number turned up 181 times. Is the die unbiased?</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: p=0.5 (unbiased). H₁: p≠0.5.</p>
+      <ol class="steps">
+        <li>\(n=324,\;\hat{p}=181/324=0.5586\)</li>
+        <li>\(Z=\dfrac{0.5586-0.5}{\sqrt{0.25/324}}=\dfrac{0.0586}{0.02778}=2.11\)</li>
+        <li>\(|Z|=2.11>1.96\)</li>
+      </ol>
+      <div class="result-box"><strong>Reject H₀: The die is biased at 5% level of significance.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">5</div><div class="q-text">Define i) Critical Region ii) One-tailed and Two-tailed test.</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <h4>Critical Region</h4>
+      <p>The set of values of the test statistic for which H₀ is rejected. If the computed statistic falls here, reject H₀.</p>
+      <h4>One-tailed Test</h4>
+      <p>Tests if parameter is <em>greater than</em> or <em>less than</em> hypothesised value. Rejection region in one tail. E.g., H₁: μ > μ₀.</p>
+      <h4>Two-tailed Test</h4>
+      <p>Tests if parameter is <em>different</em> from hypothesised value. Rejection region split between both tails. E.g., H₁: μ ≠ μ₀. At 5%: |Z| > 1.96.</p>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">6</div><div class="q-text">In 324 throws of a 6-faced die, odd numbers turned up 181 times. Is the die unbiased?</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <p>(Same as Q4.) H₀: p=0.5. \(Z=2.11>1.96\) at 5% level.</p>
+      <div class="result-box"><strong>Reject H₀: The die is biased at 5% level.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">7</div><div class="q-text">Population: 2,3,6,8,11. All samples of size 2 with replacement. Find population mean and SD.</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div></div>
+    <div class="ans-body">
+      <ol class="steps">
+        <li>N=5, Population: 2,3,6,8,11</li>
+        <li>\(\mu=\frac{2+3+6+8+11}{5}=\frac{30}{5}=6\)</li>
+        <li>Squared deviations: 16, 9, 0, 4, 25. Sum=54</li>
+        <li>\(\sigma^2=54/5=10.8,\quad \sigma=\sqrt{10.8}\approx3.286\)</li>
+      </ol>
+      <div class="result-box"><strong>Mean = 6 &nbsp;|&nbsp; SD ≈ 3.286</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">8</div><div class="q-text">18000 families; sample of 840 showed 206 with income ≤ Rs.2500. Estimate how many of 18000 have income ≤ Rs.2500 with confidence limits.</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <ol class="steps">
+        <li>\(n=840,\;\hat{p}=206/840=0.2452,\;\hat{q}=0.7548\)</li>
+        <li>\(\text{SE}=\sqrt{\hat{p}\hat{q}/n}=\sqrt{0.2452\times0.7548/840}=0.01484\)</li>
+        <li>95% CI: \(0.2452\pm1.96\times0.01484=0.2452\pm0.0291\)</li>
+        <li>Limits: 0.2161 to 0.2743</li>
+        <li>Families: \(18000\times0.2161=3890\) to \(18000\times0.2743=4937\)</li>
+      </ol>
+      <div class="result-box"><strong>Between 3890 and 4937 families have income ≤ Rs.2500 (95% CI)</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">9</div><div class="q-text">1500 ball bearings: μ=6.35g, σ=1.36g. 300 samples of size 36. Find expected mean and SD i) with replacement ii) without replacement.</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>\(N=1500,\;\mu=6.35,\;\sigma=1.36,\;n=36\)</p>
+      <span class="part">i) With Replacement</span>
+      <ol class="steps">
+        <li>Expected mean of sample means \(=\mu=6.35\)</li>
+        <li>SE \(=\sigma/\sqrt{n}=1.36/\sqrt{36}=1.36/6=0.2267\)</li>
+      </ol>
+      <div class="result-box"><strong>Mean=6.35, SE=0.2267</strong></div>
+      <span class="part">ii) Without Replacement</span>
+      <ol class="steps">
+        <li>SE \(=\dfrac{\sigma}{\sqrt{n}}\sqrt{\dfrac{N-n}{N-1}}=0.2267\times\sqrt{\dfrac{1464}{1499}}=0.2267\times0.9883=0.2241\)</li>
+      </ol>
+      <div class="result-box"><strong>Mean=6.35, SE≈0.2241 (without replacement)</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">10</div><div class="q-text">Sample of 500 men: 60% overweight. Infer proportion of overweight in population.</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <ol class="steps">
+        <li>\(n=500,\;\hat{p}=0.60,\;\hat{q}=0.40\)</li>
+        <li>SE \(=\sqrt{0.6\times0.4/500}=0.02191\)</li>
+        <li>95% CI: \(0.60\pm1.96\times0.02191=0.60\pm0.04294\)</li>
+      </ol>
+      <div class="result-box"><strong>95% CI: (55.7%, 64.3%) — population proportion of overweight</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">11</div><div class="q-text">Company A: n₁=100, x̄₁=1190, s₁=90. Company B: n₂=75, x̄₂=1200, s₂=120. Test difference in mean bulb lifetime at 5% and 1%.</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: μ₁=μ₂. H₁: μ₁≠μ₂.</p>
+      <ol class="steps">
+        <li>SE \(=\sqrt{s_1^2/n_1+s_2^2/n_2}=\sqrt{8100/100+14400/75}=\sqrt{81+192}=\sqrt{273}=16.52\)</li>
+        <li>\(Z=(1190-1200)/16.52=-0.605\)</li>
+        <li>|Z|=0.605 &lt; 1.96 (5%) and &lt; 2.576 (1%)</li>
+      </ol>
+      <div class="result-box"><strong>Accept H₀: No significant difference in mean lifetimes at both 5% and 1% levels.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">12</div><div class="q-text">Company A: n₁=1000, x̄₁=50, σ₁=15. Company B: n₂=1500, x̄₂=45, σ₂=20. Do mean wages vary? Find 95% confidence limits for difference.</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: μ₁=μ₂. H₁: μ₁≠μ₂.</p>
+      <ol class="steps">
+        <li>SE \(=\sqrt{225/1000+400/1500}=\sqrt{0.225+0.267}=\sqrt{0.492}=0.7\)</li>
+        <li>\(Z=(50-45)/0.7=7.14\)</li>
+        <li>|Z|=7.14 >> 2.576</li>
+      </ol>
+      <div class="result-box"><strong>Reject H₀: Mean wages differ significantly.</strong></div>
+      <div class="formula-box">95% CI: \((50-45)\pm1.96\times0.7=5\pm1.372 = (3.628,\;6.372)\)</div>
+      <div class="result-box"><strong>95% CI for difference in mean wages: (3.628, 6.372)</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">13</div><div class="q-text">Overall mean=74.5, SD=8. One school with 200 students: mean=75.9. Discuss significance (one-tailed and two-tailed).</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <ol class="steps">
+        <li>\(Z=\dfrac{75.9-74.5}{8/\sqrt{200}}=\dfrac{1.4}{0.5657}=2.474\)</li>
+      </ol>
+      <p><strong>Two-tailed test:</strong> |Z|=2.474 > 1.96 → Significant at 5%; &lt; 2.576 → Not significant at 1%.</p>
+      <p><strong>One-tailed test:</strong> Z=2.474 > 1.645 → Significant at 5%; Z > 2.326 → Significant at 1%.</p>
+      <div class="result-box"><strong>Result: School's mean is significantly higher (one-tailed at 1%, two-tailed at 5%).</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">14</div><div class="q-text">Aircraft type A: 5 engine troubles in 100 flights. Type B: 7 in 200 flights. Is there a significant difference at 5%?</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: p₁=p₂. H₁: p₁≠p₂.</p>
+      <ol class="steps">
+        <li>\(\hat{p}_1=5/100=0.05,\;\hat{p}_2=7/200=0.035\)</li>
+        <li>Pooled: \(\hat{p}=(5+7)/(100+200)=12/300=0.04\)</li>
+        <li>SE \(=\sqrt{0.04\times0.96(1/100+1/200)}=\sqrt{0.04\times0.96\times0.015}=\sqrt{0.000576}=0.024\)</li>
+        <li>\(Z=(0.05-0.035)/0.024=0.015/0.024=0.625\)</li>
+        <li>|Z|=0.625 &lt; 1.96</li>
+      </ol>
+      <div class="result-box"><strong>Accept H₀: No significant difference between the two types of aircraft at 5% level.</strong></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-head"><div class="q-num">15</div><div class="q-text">1000 students each from city A and city B. 400 from payment quota in each sample. Is there a significant difference between cities?</div><div class="q-badges"><span class="badge badge-co">CO 2</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div></div>
+    <div class="ans-body">
+      <p>H₀: p₁=p₂. Both proportions = 400/1000 = 0.4.</p>
+      <ol class="steps">
+        <li>\(\hat{p}_1=\hat{p}_2=0.4\), so \(\hat{p}_1-\hat{p}_2=0\)</li>
+        <li>SE \(=\sqrt{0.4\times0.6(1/1000+1/1000)}=\sqrt{0.24\times0.002}=\sqrt{0.00048}=0.02191\)</li>
+        <li>\(Z=0/0.02191=0\)</li>
+      </ol>
+      <div class="result-box"><strong>Accept H₀: No significant difference between the two cities in payment quota students.</strong></div>
+    </div>
+  </div>
+
+</div>
+<footer>Module II · Large Sample Tests · MCAP136 · S-VYASA University</footer>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module I — Probability Distributions | MCAP136</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1209; --paper: #fdf8f0; --cream: #f5ede0;
+    --gold: #b8860b; --gold-light: #d4a843; --rust: #8b3a2a;
+    --teal: #1a5f5c; --border: #d4c4a0; --muted: #6b5e4a; --highlight: #fffbf0;
+    --mod-color: #1a5f5c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Source Serif 4', Georgia, serif; background: var(--paper); color: var(--ink); line-height: 1.75; font-size: 15px; }
+
+  /* NAV */
+  .topnav { background: var(--ink); display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 2rem; }
+  .topnav a { color: #c8b896; font-size: 0.72rem; text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; }
+  .topnav a:hover { color: var(--gold-light); }
+  .page-links { display: flex; gap: 1rem; }
+  .page-links a { padding: 0.25rem 0.7rem; border: 1px solid #3a3020; border-radius: 20px; }
+  .page-links a.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+
+  /* HEADER */
+  .mod-header { background: var(--mod-color); color: #fff; padding: 2.5rem 4rem 2rem; position: relative; overflow: hidden; }
+  .mod-header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.04) 30px, rgba(255,255,255,0.04) 31px); }
+  .mod-inner { position: relative; max-width: 960px; margin: auto; }
+  .mod-tag { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.5rem; }
+  .mod-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 900; line-height: 1.1; }
+  .mod-header h1 span { opacity: 0.6; font-size: 0.6em; display: block; font-weight: 400; margin-top: 0.3rem; letter-spacing: 0.05em; }
+
+  /* LAYOUT */
+  .container { max-width: 960px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+  /* QUESTION CARD */
+  .q-card { border: 1px solid var(--border); border-radius: 2px; margin-bottom: 1.8rem; background: #fff; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .q-head { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.5rem; background: var(--cream); border-bottom: 1px solid var(--border); }
+  .q-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); line-height: 1; min-width: 2rem; padding-top: 0.1rem; }
+  .q-text { font-size: 0.95rem; font-weight: 600; color: var(--ink); flex: 1; }
+  .q-badges { display: flex; gap: 0.4rem; margin-left: auto; flex-shrink: 0; align-items: flex-start; }
+  .badge { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.2rem 0.55rem; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .badge-co { background: #e8f4f0; color: var(--teal); border: 1px solid #b0d8d4; }
+  .badge-rbtl { background: #fff3e0; color: #b45309; border: 1px solid #fed7aa; }
+  .badge-marks { background: var(--ink); color: var(--paper); }
+  .ans-body { padding: 1.5rem 1.8rem 1.8rem; }
+  .ans-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; font-weight: 600; }
+  h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--teal); margin: 1rem 0 0.4rem; }
+  p { margin-bottom: 0.7rem; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 0.7rem; }
+  li { margin-bottom: 0.3rem; }
+  .formula-box { background: var(--highlight); border-left: 3px solid var(--gold); padding: 0.8rem 1.2rem; margin: 0.8rem 0; border-radius: 0 2px 2px 0; font-size: 0.95rem; }
+  .result-box { background: #f0f8f5; border: 1px solid #b0d8d0; border-left: 4px solid var(--teal); padding: 0.7rem 1.2rem; margin: 0.8rem 0; border-radius: 0 2px 2px 0; }
+  .result-box strong { color: var(--teal); }
+  table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; font-size: 0.88rem; }
+  th { background: var(--ink); color: var(--paper); padding: 0.45rem 0.8rem; text-align: center; font-weight: 600; }
+  td { border: 1px solid var(--border); padding: 0.4rem 0.8rem; text-align: center; }
+  tr:nth-child(even) td { background: var(--cream); }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; padding: 0.5rem 0 0.5rem 2.5rem; position: relative; border-left: 2px solid var(--border); margin-left: 0.8rem; margin-bottom: 0.3rem; }
+  .steps li::before { content: counter(step); position: absolute; left: -0.9rem; top: 0.45rem; background: var(--gold); color: #fff; font-size: 0.7rem; font-weight: 700; width: 1.6rem; height: 1.6rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .part { font-weight: 600; color: var(--rust); margin-top: 0.7rem; display: block; }
+  footer { text-align: center; padding: 2rem; background: var(--ink); color: #8a7a60; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4rem; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">← Back to Home</a>
+  <div class="page-links">
+    <a href="module1.html" class="active">I</a>
+    <a href="module2.html">II</a>
+    <a href="module3.html">III</a>
+    <a href="module4.html">IV</a>
+    <a href="module5.html">V</a>
+  </div>
+</nav>
+
+<div class="mod-header">
+  <div class="mod-inner">
+    <div class="mod-tag">MCAP136 · Module I</div>
+    <h1>Probability Distributions <span>Binomial · Poisson · Normal · Exponential</span></h1>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">1</div>
+      <div class="q-text">State the probability density function of the exponential distribution and derive its mean and standard deviation.</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div>
+    </div>
+    <div class="ans-body">
+      <h4>PDF of Exponential Distribution</h4>
+      <p>A continuous random variable \(X\) follows an exponential distribution with parameter \(\lambda > 0\):</p>
+      <div class="formula-box">\[ f(x) = \lambda e^{-\lambda x},\quad x \geq 0 \qquad f(x)=0,\quad x<0 \]</div>
+      <h4>Derivation of Mean</h4>
+      <ol class="steps">
+        <li>\(E[X] = \int_0^{\infty} x \cdot \lambda e^{-\lambda x}\,dx\)</li>
+        <li>Integration by parts: \(= \lambda\left[-\frac{x}{\lambda}e^{-\lambda x}\Big|_0^\infty + \frac{1}{\lambda}\int_0^\infty e^{-\lambda x}dx\right]\)</li>
+        <li>\(= \lambda \cdot \frac{1}{\lambda^2} = \frac{1}{\lambda}\)</li>
+      </ol>
+      <div class="result-box"><strong>Mean \(= \dfrac{1}{\lambda}\)</strong></div>
+      <h4>Derivation of Standard Deviation</h4>
+      <ol class="steps">
+        <li>\(E[X^2] = \int_0^\infty x^2 \lambda e^{-\lambda x}dx = \dfrac{2}{\lambda^2}\)</li>
+        <li>\(\text{Var}(X) = \dfrac{2}{\lambda^2} - \dfrac{1}{\lambda^2} = \dfrac{1}{\lambda^2}\)</li>
+        <li>\(\sigma = \sqrt{\text{Var}(X)} = \dfrac{1}{\lambda}\)</li>
+      </ol>
+      <div class="result-box"><strong>Standard Deviation \(= \dfrac{1}{\lambda}\)</strong></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">2</div>
+      <div class="q-text">Define Binomial distribution and write its probability mass function (PMF).</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div>
+    </div>
+    <div class="ans-body">
+      <p>A random variable \(X\) follows a <strong>Binomial Distribution</strong> \(B(n,p)\) if it counts the number of successes in \(n\) independent Bernoulli trials, each with probability of success \(p\).</p>
+      <div class="formula-box">\[ P(X = r) = \binom{n}{r} p^r (1-p)^{n-r},\quad r = 0,1,2,\ldots,n \]</div>
+      <ul>
+        <li><strong>Mean:</strong> \(\mu = np\)</li>
+        <li><strong>Variance:</strong> \(\sigma^2 = npq\) where \(q = 1-p\)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">3</div>
+      <div class="q-text">Probability of defective pen = 1/10. 12 pens manufactured. Find P(i) exactly 2 defective ii) at least 2 defective).</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div>
+    </div>
+    <div class="ans-body">
+      <p>Given: \(n=12,\;p=0.1,\;q=0.9\)</p>
+      <span class="part">i) P(exactly 2 defective)</span>
+      <ol class="steps">
+        <li>\(P(X=2) = \binom{12}{2}(0.1)^2(0.9)^{10} = 66 \times 0.01 \times 0.3487\)</li>
+        <li>\(= 0.2301\)</li>
+      </ol>
+      <div class="result-box"><strong>P(X = 2) ≈ 0.2301</strong></div>
+      <span class="part">ii) P(at least 2 defective)</span>
+      <ol class="steps">
+        <li>\(P(X\geq2) = 1 - P(X=0) - P(X=1)\)</li>
+        <li>\(P(X=0)=(0.9)^{12}=0.2824\)</li>
+        <li>\(P(X=1)=12(0.1)(0.9)^{11}=0.3766\)</li>
+        <li>\(P(X\geq2)=1-0.2824-0.3766=0.3410\)</li>
+      </ol>
+      <div class="result-box"><strong>P(X ≥ 2) ≈ 0.3410</strong></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">4</div>
+      <div class="q-text">Write the mean and variance of Poisson distribution.</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div>
+    </div>
+    <div class="ans-body">
+      <p>For a Poisson distribution with parameter \(\lambda\):</p>
+      <div class="formula-box">\[ P(X=r) = \frac{e^{-\lambda}\lambda^r}{r!},\quad r=0,1,2,\ldots \]</div>
+      <ul>
+        <li><strong>Mean:</strong> \(E[X] = \lambda\)</li>
+        <li><strong>Variance:</strong> \(\text{Var}(X) = \lambda\)</li>
+      </ul>
+      <p>The unique property: <em>mean equals variance</em> for the Poisson distribution.</p>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">5</div>
+      <div class="q-text">What is standard normal distribution?</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div>
+    </div>
+    <div class="ans-body">
+      <p>A <strong>standard normal distribution</strong> is a normal distribution with mean \(\mu=0\) and standard deviation \(\sigma=1\).</p>
+      <div class="formula-box">\[ \phi(z) = \frac{1}{\sqrt{2\pi}} e^{-z^2/2},\quad -\infty < z < \infty \]</div>
+      <p>Any normal variate \(X\sim N(\mu,\sigma^2)\) is converted using:</p>
+      <div class="formula-box">\[ Z = \frac{X-\mu}{\sigma} \]</div>
+      <p>The curve is symmetric about \(z=0\). Critical values: \(Z_{0.05}=1.96\), \(Z_{0.01}=2.576\).</p>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">6</div>
+      <div class="q-text">Normal variate: Mean=30, SD=5. Find P(26≤x≤40) and P(x≥45). [Φ(0.8)=0.2881, Φ(2)=0.4772, Φ(3)=0.4987]</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">3 M</span></div>
+    </div>
+    <div class="ans-body">
+      <span class="part">i) P(26 ≤ X ≤ 40)</span>
+      <ol class="steps">
+        <li>\(Z_1 = (26-30)/5 = -0.8\), \(Z_2 = (40-30)/5 = 2\)</li>
+        <li>\(P = \Phi(0.8)+\Phi(2) = 0.2881+0.4772\)</li>
+      </ol>
+      <div class="result-box"><strong>P(26 ≤ X ≤ 40) = 0.7653</strong></div>
+      <span class="part">ii) P(X ≥ 45)</span>
+      <ol class="steps">
+        <li>\(Z = (45-30)/5 = 3\)</li>
+        <li>\(P(Z\geq3) = 0.5 - 0.4987 = 0.0013\)</li>
+      </ol>
+      <div class="result-box"><strong>P(X ≥ 45) = 0.0013</strong></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">7</div>
+      <div class="q-text">Obtain the mean and variance of the binomial distribution.</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div>
+    </div>
+    <div class="ans-body">
+      <h4>Derivation of Mean</h4>
+      <ol class="steps">
+        <li>\(E[X]=\sum_{r=0}^n r\binom{n}{r}p^r q^{n-r}\)</li>
+        <li>Use \(r\binom{n}{r}=n\binom{n-1}{r-1}\): \(E[X]=np\sum_{r=1}^n\binom{n-1}{r-1}p^{r-1}q^{n-r}\)</li>
+        <li>Substitute \(s=r-1\): \(=np(p+q)^{n-1}=np\)</li>
+      </ol>
+      <div class="result-box"><strong>Mean = np</strong></div>
+      <h4>Derivation of Variance</h4>
+      <ol class="steps">
+        <li>Find \(E[X(X-1)]=\sum r(r-1)\binom{n}{r}p^rq^{n-r}\)</li>
+        <li>Using \(r(r-1)\binom{n}{r}=n(n-1)\binom{n-2}{r-2}\): \(E[X(X-1)]=n(n-1)p^2\)</li>
+        <li>\(E[X^2]=n(n-1)p^2+np\)</li>
+        <li>\(\text{Var}(X)=n(n-1)p^2+np-n^2p^2=np-np^2=npq\)</li>
+      </ol>
+      <div class="result-box"><strong>Variance = npq</strong></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">8</div>
+      <div class="q-text">Obtain the mean and variance of the Poisson distribution.</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div>
+    </div>
+    <div class="ans-body">
+      <h4>Mean</h4>
+      <ol class="steps">
+        <li>\(E[X]=\sum_{r=0}^\infty r\cdot\frac{e^{-\lambda}\lambda^r}{r!}=e^{-\lambda}\sum_{r=1}^\infty\frac{\lambda^r}{(r-1)!}\)</li>
+        <li>Let \(s=r-1\): \(=e^{-\lambda}\lambda\sum_{s=0}^\infty\frac{\lambda^s}{s!}=e^{-\lambda}\lambda e^\lambda=\lambda\)</li>
+      </ol>
+      <div class="result-box"><strong>Mean = λ</strong></div>
+      <h4>Variance</h4>
+      <ol class="steps">
+        <li>\(E[X(X-1)]=e^{-\lambda}\lambda^2\sum_{s=0}^\infty\frac{\lambda^s}{s!}=\lambda^2\)</li>
+        <li>\(E[X^2]=\lambda^2+\lambda\)</li>
+        <li>\(\text{Var}(X)=(\lambda^2+\lambda)-\lambda^2=\lambda\)</li>
+      </ol>
+      <div class="result-box"><strong>Variance = λ &nbsp;(Mean = Variance)</strong></div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">9</div>
+      <div class="q-text">Find k for the distribution. Also find P(x≥5) and P(3&lt;x≤6).</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div>
+    </div>
+    <div class="ans-body">
+      <table>
+        <tr><th>X</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+        <tr><td>P(x)</td><td>k</td><td>3k</td><td>5k</td><td>7k</td><td>9k</td><td>11k</td><td>13k</td></tr>
+      </table>
+      <ol class="steps">
+        <li>Sum = 1: \(k+3k+5k+7k+9k+11k+13k=49k=1\implies k=\tfrac{1}{49}\)</li>
+      </ol>
+      <div class="result-box"><strong>k = 1/49</strong></div>
+      <span class="part">P(X ≥ 5) = 11k+13k = 24k = 24/49 ≈ 0.4898</span>
+      <div class="result-box"><strong>P(X ≥ 5) = 24/49</strong></div>
+      <span class="part">P(3 &lt; X ≤ 6) = 9k+11k+13k = 33k = 33/49 ≈ 0.6735</span>
+      <div class="result-box"><strong>P(3 &lt; X ≤ 6) = 33/49</strong></div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">10</div>
+      <div class="q-text">Find k, P(x&lt;6), P(x≤6), P(3&lt;x≤6) for the given distribution.</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div>
+    </div>
+    <div class="ans-body">
+      <table>
+        <tr><th>X</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
+        <tr><td>P(x)</td><td>0</td><td>k</td><td>2k</td><td>2k</td><td>3k</td><td>k²</td><td>2k²</td><td>7k²+k</td></tr>
+      </table>
+      <ol class="steps">
+        <li>Sum=1: \(10k^2+9k-1=0\)</li>
+        <li>\(k=\frac{-9+\sqrt{81+40}}{20}=\frac{-9+11}{20}=0.1\)</li>
+      </ol>
+      <div class="result-box"><strong>k = 0.1</strong></div>
+      <p><strong>P(X &lt; 6)</strong> = 0+0.1+0.2+0.2+0.3+0.01 = <strong>0.81</strong></p>
+      <p><strong>P(X ≤ 6)</strong> = 0.81+0.02 = <strong>0.83</strong></p>
+      <p><strong>P(3 &lt; X ≤ 6)</strong> = 0.3+0.01+0.02 = <strong>0.33</strong></p>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">11</div>
+      <div class="q-text">10 telephone lines, p=0.1. Find P(i) No line busy ii) At least 5 iii) At most 3 busy).</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div>
+    </div>
+    <div class="ans-body">
+      <p>\(n=10,\;p=0.1,\;q=0.9\). \(P(X=r)=\binom{10}{r}(0.1)^r(0.9)^{10-r}\)</p>
+      <span class="part">i) P(X=0)</span>
+      <div class="formula-box">\(P(0)=(0.9)^{10}=0.3487\)</div>
+      <div class="result-box"><strong>P(X=0) ≈ 0.3487</strong></div>
+      <span class="part">ii) P(X≥5)</span>
+      <ol class="steps">
+        <li>P(0)=0.3487, P(1)=0.3874, P(2)=0.1937, P(3)=0.0574, P(4)=0.0112</li>
+        <li>\(P(X\leq4)=0.9984\)</li>
+        <li>\(P(X\geq5)=1-0.9984=0.0016\)</li>
+      </ol>
+      <div class="result-box"><strong>P(X≥5) ≈ 0.0016</strong></div>
+      <span class="part">iii) P(X≤3)</span>
+      <p>\(=0.3487+0.3874+0.1937+0.0574=0.9872\)</p>
+      <div class="result-box"><strong>P(X≤3) ≈ 0.9872</strong></div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">12</div>
+      <div class="q-text">Die thrown 8 times. P(getting a six): i) exactly 2 ii) at least once iii) at most 7 times.</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div>
+    </div>
+    <div class="ans-body">
+      <p>\(n=8,\;p=\tfrac{1}{6},\;q=\tfrac{5}{6}\)</p>
+      <span class="part">i) P(X=2)</span>
+      <div class="formula-box">\(\binom{8}{2}(\tfrac{1}{6})^2(\tfrac{5}{6})^6=28\times\tfrac{15625}{1679616}\approx0.2605\)</div>
+      <div class="result-box"><strong>P(X=2) ≈ 0.2605</strong></div>
+      <span class="part">ii) P(X≥1) = 1 − P(X=0) = 1 − (5/6)⁸ = 1 − 0.2326</span>
+      <div class="result-box"><strong>P(X≥1) ≈ 0.7674</strong></div>
+      <span class="part">iii) P(X≤7) = 1 − P(X=8) = 1 − (1/6)⁸ ≈ 0.9999994</span>
+      <div class="result-box"><strong>P(X≤7) ≈ 1.0000</strong></div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">13</div>
+      <div class="q-text">Mean defectives in sample of 20 is 2. Out of 1000 samples, how many contain at least 3 defectives?</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">7 M</span></div>
+    </div>
+    <div class="ans-body">
+      <p>\(\lambda=2\), use Poisson. \(e^{-2}=0.1353\)</p>
+      <ol class="steps">
+        <li>P(0)=0.1353, P(1)=0.2707, P(2)=0.2707</li>
+        <li>\(P(X\geq3)=1-0.1353-0.2707-0.2707=0.3233\)</li>
+        <li>Expected samples \(=1000\times0.3233\approx323\)</li>
+      </ol>
+      <div class="result-box"><strong>≈ 323 samples contain at least 3 defective parts</strong></div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">14</div>
+      <div class="q-text">2% fuses defective, box of 200. Find P(i) no defective ii) 3 or more iii) at least one defective).</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div>
+    </div>
+    <div class="ans-body">
+      <p>\(\lambda=200\times0.02=4\), \(e^{-4}=0.0183\)</p>
+      <span class="part">i) P(X=0) = e⁻⁴ = 0.0183</span>
+      <div class="result-box"><strong>P(no defective) ≈ 0.0183</strong></div>
+      <span class="part">ii) P(X≥3)</span>
+      <ol class="steps">
+        <li>P(1)=0.0733, P(2)=0.1465</li>
+        <li>\(P(X\geq3)=1-0.0183-0.0733-0.1465=0.7619\)</li>
+      </ol>
+      <div class="result-box"><strong>P(X≥3) ≈ 0.7619</strong></div>
+      <span class="part">iii) P(X≥1) = 1 − 0.0183 = 0.9817</span>
+      <div class="result-box"><strong>P(X≥1) ≈ 0.9817</strong></div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">15</div>
+      <div class="q-text">300 misprints in 500-page book. Find P(given page has i) exactly 3 ii) less than 3 iii) 4 or more).</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div>
+    </div>
+    <div class="ans-body">
+      <p>\(\lambda=300/500=0.6\), \(e^{-0.6}=0.5488\)</p>
+      <span class="part">i) P(X=3) = e⁻⁰·⁶(0.6)³/3! = 0.5488×0.216/6 = 0.0198</span>
+      <div class="result-box"><strong>P(X=3) ≈ 0.0198</strong></div>
+      <span class="part">ii) P(X&lt;3)</span>
+      <ol class="steps">
+        <li>P(0)=0.5488, P(1)=0.3293, P(2)=0.0988</li>
+        <li>Sum = 0.9769</li>
+      </ol>
+      <div class="result-box"><strong>P(X&lt;3) ≈ 0.9769</strong></div>
+      <span class="part">iii) P(X≥4) = 1 − (0.9769+0.0198) = 0.0033</span>
+      <div class="result-box"><strong>P(X≥4) ≈ 0.0033</strong></div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">16</div>
+      <div class="q-text">1000 students, μ=70, σ=5. Find number with marks i) &lt;65 ii) &gt;75 iii) between 65 and 75. [A(1)=0.3413]</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div>
+    </div>
+    <div class="ans-body">
+      <span class="part">i) X &lt; 65: Z=(65-70)/5=-1. P=0.5-0.3413=0.1587 → 1000×0.1587≈159</span>
+      <div class="result-box"><strong>≈ 159 students scored less than 65</strong></div>
+      <span class="part">ii) X &gt; 75: Z=(75-70)/5=1. P=0.5-0.3413=0.1587 → 159 students</span>
+      <div class="result-box"><strong>≈ 159 students scored more than 75</strong></div>
+      <span class="part">iii) 65 to 75: P=2×0.3413=0.6826 → 1000×0.6826≈683</span>
+      <div class="result-box"><strong>≈ 683 students scored between 65 and 75</strong></div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-card">
+    <div class="q-head">
+      <div class="q-num">17</div>
+      <div class="q-text">Bulb life: μ=2000 hr, σ=60 hr, N=2500. Find bulbs lasting i) &gt;2100 hr ii) &lt;1950 hr iii) 1900–2100 hr. [A(1.66)=0.4515, A(0.83)=0.2967]</div>
+      <div class="q-badges"><span class="badge badge-co">CO 1</span><span class="badge badge-rbtl">L3</span><span class="badge badge-marks">14 M</span></div>
+    </div>
+    <div class="ans-body">
+      <span class="part">i) X &gt; 2100: Z=(2100-2000)/60=1.67. P=0.5-0.4525=0.0475 → 2500×0.0475≈119</span>
+      <div class="result-box"><strong>≈ 119 bulbs last more than 2100 hours</strong></div>
+      <span class="part">ii) X &lt; 1950: Z=(1950-2000)/60=-0.83. P=0.5-0.2967=0.2033 → 2500×0.2033≈508</span>
+      <div class="result-box"><strong>≈ 508 bulbs last less than 1950 hours</strong></div>
+      <span class="part">iii) 1900 to 2100: Z=±1.67. P=2×0.4525=0.9050 → 2500×0.905≈2263</span>
+      <div class="result-box"><strong>≈ 2263 bulbs last between 1900 and 2100 hours</strong></div>
+    </div>
+  </div>
+
+</div>
+<footer>Module I · Probability Distributions · MCAP136 · S-VYASA University</footer>
+</body>
+</html>
